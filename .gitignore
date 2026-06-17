@@ -1,14 +1,16 @@
+@"
 # Laravel
-backend-pupr/vendor/
-backend-pupr/.env
-backend-pupr/storage/*.key
+**/vendor/
+**/.env
+**/storage/*.key
 
 # Next.js
-frontend-pupr/node_modules/
-frontend-pupr/.next/
-frontend-pupr/out/
+**/node_modules/
+**/.next/
+**/out/
 
-# umum
+# Log & OS
+*.log
 .DS_Store
 Thumbs.db
-*.log
+"@ | Set-Content .gitignore
