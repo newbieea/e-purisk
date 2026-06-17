@@ -9,6 +9,8 @@ import {
   getUser,
   getRisiko,
   getSuperDashboard,
+  getDokumen,
+  uploadDokumen,
 } from "@/lib/api";
 
 import {
@@ -28,8 +30,42 @@ import {
 } from "recharts";
 
 export default function DashboardPage() {
+  const [dokumen, setDokumen] = useState<any[]>([]);
 
-  const [user, setUser] = useState<any>(null);
+  useEffect(() => {
+  const fetchDokumen = async () => {
+    try {
+      const res = await getDokumen();
+      setDokumen(res);
+    } catch (error) {
+      console.error("Gagal ambil dokumen:", error);
+    }
+  };
+
+  fetchDokumen();
+}, []);
+
+const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const file = e.target.files?.[0];
+
+  if (!file) return;
+
+  try {
+    await uploadDokumen(file);
+
+    const fresh = await getDokumen();
+    setDokumen(fresh);
+
+    toast.success("Dokumen berhasil diupload");
+  } catch (error) {
+    console.error(error);
+    toast.error("Gagal upload dokumen");
+  }
+
+  e.target.value = "";
+};
+
+const [user, setUser] = useState<any>(null);
 
   const [data, setData] = useState<any[]>([]);
 
@@ -292,7 +328,68 @@ export default function DashboardPage() {
               </h2>
 
             </div>
+             <div className="bg-white p-4 rounded-xl shadow mt-6">
 
+  <h2 className="font-bold mb-4">
+    Upload Dokumen PDF
+  </h2>
+
+  <input
+    type="file"
+    accept=".pdf"
+    onChange={handleUpload}
+    className="border p-2 rounded"
+  />
+
+</div>
+            <div className="bg-white p-4 rounded-xl shadow mt-6">
+
+  <h2 className="font-bold mb-4">
+    Dokumen Terpublikasi
+  </h2>
+
+  <table className="w-full border">
+
+    <thead className="bg-blue-900 text-white">
+      <tr>
+        <th className="p-2">Nama File</th>
+        <th className="p-2">Tanggal</th>
+        <th className="p-2">Status</th>
+        <th className="p-2">Aksi</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      {dokumen.map((item) => (
+        <tr key={item.id}>
+          <td className="border p-2">
+            {item.nama}
+          </td>
+
+          <td className="border p-2">
+            {item.tanggal}
+          </td>
+
+          <td className="border p-2">
+            {item.status}
+          </td>
+
+          <td className="border p-2">
+            <a
+              href={item.url}
+              target="_blank"
+              className="bg-blue-600 text-white px-3 py-1 rounded"
+            >
+              Lihat
+            </a>
+          </td>
+        </tr>
+      ))}
+    </tbody>
+
+  </table>
+
+</div>
           </div>
 
           {/* KPI TAMBAHAN dan chart tetap */}
