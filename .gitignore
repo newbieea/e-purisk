@@ -1,0 +1,14 @@
+# Laravel
+backend-pupr/vendor/
+backend-pupr/.env
+backend-pupr/storage/*.key
+
+# Next.js
+frontend-pupr/node_modules/
+frontend-pupr/.next/
+frontend-pupr/out/
+
+# umum
+.DS_Store
+Thumbs.db
+*.log
